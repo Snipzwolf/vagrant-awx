@@ -26,3 +26,11 @@ git clone -b $awx_version --single-branch --depth 1 https://github.com/ansible/a
 
 cd awx/installer
 ansible-playbook -i inventory install.yml
+
+pip install -q -I ansible-tower-cli==$awx_cli_version;
+
+#setup cli with the defaul config
+tower-cli config host http://127.0.0.1;
+tower-cli config username admin;
+tower-cli config password password;
+tower-cli config verify_ssl false;

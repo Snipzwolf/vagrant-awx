@@ -6,6 +6,7 @@ shell_env_vars = {
   awx_version: "4.0.0",
   dockerpy_version: "4.0.1",
   dockercompose_version: "1.24.0",
+  awx_cli_version: "3.3.4",
   node_repo: "https://deb.nodesource.com/setup_10.x"
 }
 
