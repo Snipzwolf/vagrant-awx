@@ -23,4 +23,10 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision :shell, :path => "provision.sh", :env => shell_env_vars
+
+  if(File.file?("./.private/provision.sh"))
+    config.vm.provision :shell, :path => "./.private/provision.sh", :env => shell_env_vars
+
+    config.vm.synced_folder "./.private", "/home/vagrant/private-sync"
+  end
 end
