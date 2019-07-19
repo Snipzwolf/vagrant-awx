@@ -14,20 +14,27 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-18.04"
 
   config.vm.network "forwarded_port", guest: 80, host_ip: "127.0.0.1", host: 8080
+  config.vm.network "forwarded_port", guest: 22, host_ip: "127.0.0.1", host: 2251
 
   config.vm.provider "virtualbox" do |vb|
     vb.name = "vagrant-awx"
 
-    vb.customize ["modifyvm", :id, "--memory", 2048]
-    vb.customize ["modifyvm", :id, "--cpus", 4]
+    vb.customize ["modifyvm", :id, "--memory", 4096]
+    vb.customize ["modifyvm", :id, "--cpus", 3]
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
+  if(File.directory?("./.private"))
+    config.vm.synced_folder "./.private", "/home/vagrant/private-sync"
+  end
+
+  if(File.file?("./.private/pre-provision.sh"))
+    config.vm.provision :shell, :path => "./.private/pre-provision.sh", :env => shell_env_vars
   end
 
   config.vm.provision :shell, :path => "provision.sh", :env => shell_env_vars
 
-  if(File.file?("./.private/provision.sh"))
-    config.vm.provision :shell, :path => "./.private/provision.sh", :env => shell_env_vars
-
-    config.vm.synced_folder "./.private", "/home/vagrant/private-sync"
+  if(File.file?("./.private/post-provision.sh"))
+    config.vm.provision :shell, :path => "./.private/post-provision.sh", :env => shell_env_vars
   end
 end
